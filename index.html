@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tempo di Mining Bitcoin V0.01</title>
+  <title>Ere del Mining Bitcoin V0.01</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,15 +27,17 @@
       color: #333;
     }
 
-    #sato-message {
+    #sato-box {
       position: absolute;
       top: 20px;
       left: 20px;
-      font-family: 'Brush Script MT', cursive;
-      font-size: 1.1rem;
       font-style: italic;
-      color: #4b2e00;
-      max-width: 200px;
+      font-family: "Brush Script MT", cursive;
+      font-size: 1.1rem;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.6);
+      padding: 10px;
+      border-radius: 8px;
     }
 
     .era-container {
@@ -63,6 +64,7 @@
       width: 100px;
       font-weight: bold;
       color: #333;
+      flex-shrink: 0;
     }
 
     .bar {
@@ -70,8 +72,8 @@
       border-radius: 5px;
       background-color: #fcbf49;
       margin: 0 10px;
+      flex-grow: 1;
       position: relative;
-      transition: width 0.8s ease;
     }
 
     .bar.current {
@@ -87,6 +89,7 @@
       color: #555;
       text-align: right;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .ellipsis {
@@ -98,7 +101,7 @@
 
     #halving-countdown {
       position: fixed;
-      bottom: 20px;
+      bottom: 40px;
       width: 100%;
       text-align: center;
       font-size: 1rem;
@@ -106,22 +109,22 @@
       font-weight: bold;
     }
 
-    #halving-clock {
+    #digital-clock {
       position: fixed;
-      bottom: 60px;
+      bottom: 80px;
       width: 100%;
       text-align: center;
-      font-family: 'Courier New', monospace;
       font-size: 2rem;
-      color: #ff6600;
-      text-shadow: 0 0 5px #ff6600;
+      font-family: 'Courier New', monospace;
+      color: #ff9900;
+      text-shadow: 0 0 5px #ff9900;
     }
   </style>
 </head>
 <body>
 
   <div id="block-current">Siamo al blocco: ...</div>
-  <div id="sato-message">Mi sto impegnando amico,<br>un abbraccio<br>'Sato'</div>
+  <div id="sato-box">Mi sto impegnando anche io amico mio,<br>un abbraccio 'Sato'</div>
 
   <h1>Stagioni del Mining Bitcoin</h1>
 
@@ -129,7 +132,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">1 - 50BTC</div>
-        <div class="bar" style="width: 100%"></div>
+        <div class="bar" style="flex-basis: 100%; max-width: 100%;"></div>
         <div class="label-right">2009 - 2012</div>
       </div>
     </div>
@@ -137,7 +140,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">2 - 25BTC</div>
-        <div class="bar" style="width: 50%"></div>
+        <div class="bar" style="flex-basis: 50%; max-width: 50%;"></div>
         <div class="label-right">2012 - 2016</div>
       </div>
     </div>
@@ -145,7 +148,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">3 - 12.5BTC</div>
-        <div class="bar" style="width: 25%"></div>
+        <div class="bar" style="flex-basis: 25%; max-width: 25%;"></div>
         <div class="label-right">2016 - 2020</div>
       </div>
     </div>
@@ -153,7 +156,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">4 - 6.25BTC</div>
-        <div class="bar" style="width: 12.5%"></div>
+        <div class="bar" style="flex-basis: 12.5%; max-width: 12.5%;"></div>
         <div class="label-right">2020 - 2024</div>
       </div>
     </div>
@@ -161,7 +164,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">5 - 3.125BTC</div>
-        <div class="bar current" style="width: 6.25%"></div>
+        <div class="bar current" style="flex-basis: 6.25%; max-width: 6.25%;"></div>
         <div class="label-right">2024 - 2028</div>
       </div>
     </div>
@@ -169,7 +172,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">6 - 1.5625BTC</div>
-        <div class="bar" style="width: 3.125%"></div>
+        <div class="bar" style="flex-basis: 3.125%; max-width: 3.125%;"></div>
         <div class="label-right">2028 - 2032</div>
       </div>
     </div>
@@ -177,7 +180,7 @@
     <div class="era">
       <div class="bar-wrapper">
         <div class="label-left">7 - 0.78125BTC</div>
-        <div class="bar" style="width: 1.5625%"></div>
+        <div class="bar" style="flex-basis: 1.5625%; max-width: 1.5625%;"></div>
         <div class="label-right">2032 - 2036</div>
       </div>
     </div>
@@ -185,8 +188,8 @@
     <div class="ellipsis">…</div>
   </div>
 
-  <div id="halving-clock">...</div>
-  <div id="halving-countdown">Prossimo dimezzamento stimato fra: ...</div>
+  <div id="digital-clock">Loading...</div>
+  <div id="halving-countdown">Prossimo dimezzamento del mining stimato fra: ...</div>
 
   <script>
     async function updateBlockData() {
@@ -221,14 +224,15 @@
         const countdownText = `Prossimo dimezzamento del mining stimato fra: ${years} anni, ${months} mesi, ${days} giorni`;
         document.getElementById("halving-countdown").textContent = countdownText;
 
-        const totalDays = Math.floor((futureDate - now) / (1000 * 60 * 60 * 24));
-        document.getElementById("halving-clock").textContent = `${totalDays} giorni rimanenti`;
+        // Mostra solo i giorni rimanenti con orologio digitale
+        const totalDays = Math.floor(millisLeft / (1000 * 60 * 60 * 24));
+        document.getElementById("digital-clock").textContent = `⌛ ${totalDays} giorni al prossimo halving`;
 
       } catch (e) {
         console.error("Errore nel caricamento dei dati:", e);
         document.getElementById("block-current").textContent = "Blocco corrente: errore";
         document.getElementById("halving-countdown").textContent = "Errore nel calcolo del dimezzamento.";
-        document.getElementById("halving-clock").textContent = "Errore";
+        document.getElementById("digital-clock").textContent = "Errore orologio";
       }
     }
 
