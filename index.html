@@ -3,146 +3,60 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Last21M - Lavori in corso</title>
+  <title>Blocco corrente Bitcoin</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #fff8dc;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       margin: 0;
-      padding-top: 50px;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    #btc-left {
-      font-size: 3rem;
-      color: darkorange;
-      margin: 20px 0;
-    }
-
-    #last-update {
-      font-size: 0.9rem;
-      color: #555;
+      text-align: center;
     }
 
     #block-info {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      font-size: 0.9rem;
+      font-size: 2.5rem;
       color: #333;
-    }
-
-    #pocketwatch {
-      margin: 40px auto;
-      width: 300px;
-      height: 300px;
-      border: 8px solid #ccc;
-      border-radius: 50%;
-      background-color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
-
-    #countdown {
-      font-size: 1.5rem;
-      color: #222;
       margin-bottom: 10px;
     }
 
-    #blocks-remaining {
+    #last-update {
       font-size: 1rem;
-      color: #444;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <h1>BTC rimanenti per raggiungere i 20 milioni:</h1>
-  <div id="btc-left">Caricamento...</div>
-
-  <div id="pocketwatch">
-    <div id="countdown">-- : -- : -- : --</div>
-    <div id="blocks-remaining">Blocco mancante...</div>
-  </div>
-
+  <div id="block-info">Caricamento blocco...</div>
   <div id="last-update"></div>
-  <div id="block-info">Siamo al blocco ...</div>
 
   <script>
-    async function fetchBTCStats() {
+    async function updateBlockInfo() {
       try {
         const response = await fetch("https://api.blockchair.com/bitcoin/stats");
         const data = await response.json();
 
-        const btcIssued = data.data.circulation / 100000000;
-        const btcRemaining = 20000000 - btcIssued;
         const currentBlock = data.data.blocks;
 
-        // Mostra BTC rimanenti
-        document.getElementById("btc-left").textContent =
-          btcRemaining.toLocaleString("it-IT", { maximumFractionDigits: 6 }) + " BTC";
-
-        // Mostra info blocco
         document.getElementById("block-info").textContent =
-          "Siamo al blocco " + currentBlock.toLocaleString("it-IT");
+          "Blocco corrente: " + currentBlock.toLocaleString("it-IT");
 
-        // Ultimo aggiornamento
         const now = new Date();
         document.getElementById("last-update").textContent =
           "Ultimo aggiornamento: " + now.toLocaleString("it-IT");
 
-        // Blocchi rimanenti fino al 840.000 (dove ~20M BTC saranno minati)
-        const targetBlock = 840000;
-        const blocksLeft = targetBlock - currentBlock;
-        document.getElementById("blocks-remaining").textContent =
-          "Blocchi mancanti: " + blocksLeft.toLocaleString("it-IT");
-
-        // Stima tempo mancante (1 blocco ogni ~10 minuti)
-        const estimatedMinutesLeft = blocksLeft * 10;
-        const estimatedMsLeft = estimatedMinutesLeft * 60 * 1000;
-
-        const targetDate = new Date(Date.now() + estimatedMsLeft);
-        updateCountdown(targetDate);
-
       } catch (error) {
-        document.getElementById("btc-left").textContent = "Errore nel caricamento.";
+        document.getElementById("block-info").textContent = "Errore nel caricamento.";
         document.getElementById("last-update").textContent = "";
-        document.getElementById("block-info").textContent = "";
         console.error("Errore API:", error);
       }
     }
 
-    function updateCountdown(targetDate) {
-      const interval = setInterval(() => {
-        const now = new Date();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-          document.getElementById("countdown").textContent = "Raggiunto!";
-          clearInterval(interval);
-          return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        document.getElementById("countdown").textContent =
-          `${days}g ${hours}h ${minutes}m ${seconds}s`;
-      }, 1000);
-    }
-
-    fetchBTCStats();
-    setInterval(fetchBTCStats, 600000); // ogni 10 minuti
+    updateBlockInfo(); // iniziale
+    setInterval(updateBlockInfo, 600000); // ogni 10 minuti
   </script>
 </body>
 </html>
