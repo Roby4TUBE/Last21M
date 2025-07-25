@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Last 21M</title>
+    Last 21M
   </head>
   <body>
     <h1>work in progress!</h1>
