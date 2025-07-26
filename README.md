@@ -7,6 +7,6 @@
   </head>
   <body>
     <h1>work in progress!</h1>
-    <p>Bit 5 bit</p>
+    <p>Bit 4 bit</p>
   </body>
 </html>
